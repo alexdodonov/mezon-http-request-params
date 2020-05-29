@@ -46,7 +46,11 @@ class HttpRequestParams extends \Mezon\Transport\RequestParams
      */
     protected function getHttpRequestHeaders(): array
     {
-        $headers = getallheaders();
+        $headers = [];
+
+        if (function_exists('getallheaders')) {
+            $headers = getallheaders();
+        }
 
         return $headers === false ? [] : $headers;
     }

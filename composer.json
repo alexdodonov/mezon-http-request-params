@@ -26,5 +26,8 @@
 		"psr-4": {
 			"Mezon\\Transport\\": ""
 		}
+	},
+	"scripts": {
+		"test" : "php ./vendor/phpunit/phpunit/phpunit"
 	}
 }

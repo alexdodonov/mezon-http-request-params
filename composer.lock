@@ -64,16 +64,16 @@
         },
         {
             "name": "mezon/request-params",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexdodonov/mezon-request-params.git",
-                "reference": "6b70639e07d0d4e2c5981ac30bdc3a3fa475eee7"
+                "reference": "b6d15f46a716d23797644750e9f24f7581356cc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexdodonov/mezon-request-params/zipball/6b70639e07d0d4e2c5981ac30bdc3a3fa475eee7",
-                "reference": "6b70639e07d0d4e2c5981ac30bdc3a3fa475eee7",
+                "url": "https://api.github.com/repos/alexdodonov/mezon-request-params/zipball/b6d15f46a716d23797644750e9f24f7581356cc4",
+                "reference": "b6d15f46a716d23797644750e9f24f7581356cc4",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
             ],
             "description": "Small script for parameters fetcher",
             "homepage": "https://github.com/alexdodonov/mezon-request-params",
-            "time": "2020-05-25T06:59:36+00:00"
+            "time": "2020-05-28T12:36:43+00:00"
         },
         {
             "name": "mezon/router",
