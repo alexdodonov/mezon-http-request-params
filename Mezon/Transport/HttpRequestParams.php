@@ -14,7 +14,7 @@ namespace Mezon\Transport;
 /**
  * Request params fetcher
  */
-class HttpRequestParams extends \Mezon\Transport\RequestParams
+class HttpRequestParams extends RequestParams
 {
 
     /**

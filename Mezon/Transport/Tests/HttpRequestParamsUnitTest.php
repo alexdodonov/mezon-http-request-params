@@ -1,4 +1,5 @@
 <?php
+namespace Mezon\Transport\Tests;
 
 /**
  * Unit tests for the class HttpRequestParams.
@@ -115,7 +116,7 @@ class HttpRequestParamsUnitTest extends \PHPUnit\Framework\TestCase
 
         $requestParams = $this->getRequestParamsMock();
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $requestParams->getParam(SESSION_ID_FIELD_NAME);
     }
 
