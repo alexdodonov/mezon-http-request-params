@@ -1,25 +1,28 @@
 <?php
-namespace Mezon\Transport\Tests;
-
-/**
- * Unit tests for the class HttpRequestParams.
- */
-define('SESSION_ID_FIELD_NAME', 'session_id');
+use Mezon\Router\Router;
+use PHPUnit\Framework\TestCase;
+use Mezon\Transport\HttpRequestParams;
 
 $testHeaders = [];
 
 function getallheaders()
 {
     global $testHeaders;
-
+    
     return $testHeaders;
 }
+
+
+/**
+ * Unit tests for the class HttpRequestParams.
+ */
+define('SESSION_ID_FIELD_NAME', 'session_id');
 
 /**
  *
  * @author Dodonov A.A.
  */
-class HttpRequestParamsUnitTest extends \PHPUnit\Framework\TestCase
+class HttpRequestParamsUnitTest extends TestCase
 {
 
     /**
@@ -27,11 +30,13 @@ class HttpRequestParamsUnitTest extends \PHPUnit\Framework\TestCase
      */
     protected function getRequestParamsMock()
     {
-        $router = new \Mezon\Router\Router();
-        $router->addRoute('/test/[i:rparam]/', function () {}, 'GET');
+        $router = new Router();
+        $router->addRoute('/test/[i:rparam]/', function () {
+            // no need to do something
+        }, 'GET');
         $router->callRoute('/test/111/');
 
-        return new \Mezon\Transport\HttpRequestParams($router);
+        return new HttpRequestParams($router);
     }
 
     /**
