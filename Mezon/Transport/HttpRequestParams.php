@@ -16,6 +16,8 @@ namespace Mezon\Transport;
  */
 class HttpRequestParams extends RequestParams
 {
+    
+    // TODO refactor it using mezon/request
 
     /**
      * Fetching auth token from headers
