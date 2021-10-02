@@ -1,4 +1,6 @@
 <?php
+namespace Mezon\Transport\Tests;
+
 use Mezon\Router\Router;
 use PHPUnit\Framework\TestCase;
 use Mezon\Transport\HttpRequestParams;
