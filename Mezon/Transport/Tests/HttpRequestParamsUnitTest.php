@@ -5,13 +5,17 @@ use Mezon\Transport\HttpRequestParams;
 
 $testHeaders = [];
 
-function getallheaders()
+/**
+ * Method returns list of headers
+ *
+ * @return array list of headers
+ */
+function getallheaders(): array
 {
     global $testHeaders;
-    
+
     return $testHeaders;
 }
-
 
 /**
  * Unit tests for the class HttpRequestParams.
@@ -21,14 +25,17 @@ define('SESSION_ID_FIELD_NAME', 'session_id');
 /**
  *
  * @author Dodonov A.A.
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class HttpRequestParamsUnitTest extends TestCase
 {
 
     /**
-     * Method constructs object to be tested.
+     * Method constructs object to be tested
+     *
+     * @return HttpRequestParams request param object
      */
-    protected function getRequestParamsMock()
+    protected function getRequestParamsMock(): HttpRequestParams
     {
         $router = new Router();
         $router->addRoute('/test/[i:rparam]/', function () {
@@ -40,9 +47,9 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing empty result of the get_http_request_headers method.
+     * Testing empty result of the get_http_request_headers method
      */
-    public function testGetHttpRequestHeaders()
+    public function testGetHttpRequestHeaders(): void
     {
         // setup
         $requestParams = $this->getRequestParamsMock();
@@ -57,7 +64,7 @@ class HttpRequestParamsUnitTest extends TestCase
     /**
      * Testing getting parameter
      */
-    public function testGetSessionIdFromAuthorization()
+    public function testGetSessionIdFromAuthorization(): void
     {
         // setup
         global $testHeaders;
@@ -76,7 +83,7 @@ class HttpRequestParamsUnitTest extends TestCase
     /**
      * Testing getting parameter
      */
-    public function testGetSessionIdFromAuthentication()
+    public function testGetSessionIdFromAuthentication(): void
     {
         // setup
         global $testHeaders;
@@ -93,9 +100,9 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing getting parameter.
+     * Testing getting parameter
      */
-    public function testGetSessionIdFromCgiAuthorization()
+    public function testGetSessionIdFromCgiAuthorization(): void
     {
         // setup
         global $testHeaders;
@@ -112,9 +119,9 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing getting parameter.
+     * Testing getting parameter
      */
-    public function testGetUnexistingSessionId()
+    public function testGetUnexistingSessionId(): void
     {
         global $testHeaders;
         $testHeaders = [];
@@ -126,9 +133,9 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing getting parameter from custom header.
+     * Testing getting parameter from custom header
      */
-    public function testGetParameterFromHeader()
+    public function testGetParameterFromHeader(): void
     {
         // setup
         global $testHeaders;
@@ -146,9 +153,9 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing getting parameter from $_POST.
+     * Testing getting parameter from $_POST
      */
-    public function testGetParameterFromPost()
+    public function testGetParameterFromPost(): void
     {
         // setup
         $_POST['post-parameter'] = 'post value';
@@ -163,9 +170,9 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing getting parameter from $_GET.
+     * Testing getting parameter from $_GET
      */
-    public function testGetParameterFromGet()
+    public function testGetParameterFromGet(): void
     {
         // setup
         $_GET['get-parameter'] = 'get value';
@@ -180,7 +187,7 @@ class HttpRequestParamsUnitTest extends TestCase
     }
 
     /**
-     * Testing method
+     * Testing method getParam wich fetches parameter from the route
      */
     public function testGettingParametersFromRoute(): void
     {

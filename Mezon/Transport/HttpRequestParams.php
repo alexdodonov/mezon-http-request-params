@@ -27,9 +27,9 @@ class HttpRequestParams extends RequestParams
      */
     public function __construct(Router &$router)
     {
-        $this->router = $router;
+        parent::__construct($router);
 
-        Request::registerRouter($this->router);
+        Request::registerRouter($router);
     }
 
     /**
