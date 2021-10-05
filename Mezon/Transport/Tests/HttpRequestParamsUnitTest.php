@@ -37,6 +37,16 @@ namespace Mezon\Transport\Tests
     {
 
         /**
+         *
+         * {@inheritdoc}
+         * @see TestCase::setUp()
+         */
+        protected function setUp(): void
+        {
+            $_SERVER['REQUEST_METHOD'] = 'GET';
+        }
+
+        /**
          * Method constructs object to be tested
          *
          * @return HttpRequestParams request param object
