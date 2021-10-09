@@ -15,6 +15,19 @@ namespace
 
         return $testHeaders;
     }
+
+    /**
+     * Method sets headers for testing purposes
+     *
+     * @param array $headers
+     *            headers
+     */
+    function setallheaders(array $headers): void
+    {
+        global $testHeaders;
+
+        $testHeaders = $headers;
+    }
 }
 namespace Mezon\Transport\Tests
 {
