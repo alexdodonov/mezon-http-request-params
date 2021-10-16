@@ -2,8 +2,6 @@
 namespace 
 {
 
-    $testHeaders = [];
-
     /**
      * Method returns list of headers
      *
@@ -11,9 +9,7 @@ namespace
      */
     function getallheaders(): array
     {
-        global $testHeaders;
-
-        return $testHeaders;
+        return \Mezon\Transport\Tests\Headers::getAllHeaders();
     }
 
     /**
@@ -24,9 +20,7 @@ namespace
      */
     function setallheaders(array $headers): void
     {
-        global $testHeaders;
-
-        $testHeaders = $headers;
+        \Mezon\Transport\Tests\Headers::setAllHeaders($headers);
     }
 }
 namespace Mezon\Transport\Tests
@@ -96,10 +90,9 @@ namespace Mezon\Transport\Tests
         public function testGetSessionIdFromAuthorization(): void
         {
             // setup
-            global $testHeaders;
-            $testHeaders = [
+            Headers::setAllHeaders([
                 'Authorization' => 'Basic author session id'
-            ];
+            ]);
             $requestParams = $this->getRequestParamsMock();
 
             // test body
@@ -115,10 +108,9 @@ namespace Mezon\Transport\Tests
         public function testGetSessionIdFromAuthentication(): void
         {
             // setup
-            global $testHeaders;
-            $testHeaders = [
+            Headers::setAllHeaders([
                 'Authentication' => 'Basic author session id'
-            ];
+            ]);
             $requestParams = $this->getRequestParamsMock();
 
             // test body
@@ -134,10 +126,9 @@ namespace Mezon\Transport\Tests
         public function testGetSessionIdFromCgiAuthorization(): void
         {
             // setup
-            global $testHeaders;
-            $testHeaders = [
+            Headers::setAllHeaders([
                 'Cgi-Authorization' => 'Basic cgi author session id'
-            ];
+            ]);
             $requestParams = $this->getRequestParamsMock();
 
             // test body
@@ -152,8 +143,7 @@ namespace Mezon\Transport\Tests
          */
         public function testGetUnexistingSessionId(): void
         {
-            global $testHeaders;
-            $testHeaders = [];
+            Headers::setAllHeaders([]);
 
             $requestParams = $this->getRequestParamsMock();
 
@@ -167,10 +157,9 @@ namespace Mezon\Transport\Tests
         public function testGetParameterFromHeader(): void
         {
             // setup
-            global $testHeaders;
-            $testHeaders = [
+            Headers::setAllHeaders([
                 'Custom-Header' => 'header value'
-            ];
+            ]);
 
             $requestParams = $this->getRequestParamsMock();
 
