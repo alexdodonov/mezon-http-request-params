@@ -3,7 +3,7 @@ namespace Mezon\Transport\Tests;
 
 class Headers
 {
-
+//TODO remove it. Use Headers\Layer from mezon/ifrastructure-layer
     /**
      * Request headers
      *
