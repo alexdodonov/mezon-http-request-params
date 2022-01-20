@@ -22,10 +22,10 @@ class HttpRequestParams extends RequestParams
     /**
      * Constructor
      *
-     * @param Router $router
-     *            Router object
+     * @param ?Router $router
+     *            router object
      */
-    public function __construct(Router &$router)
+    public function __construct(?Router &$router)
     {
         parent::__construct($router);
 

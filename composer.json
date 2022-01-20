@@ -37,5 +37,8 @@
 		"test-unit": "php ./vendor/phpunit/phpunit/phpunit --testsuit unit --order-by=random",
 		"test-debug": "php ./vendor/phpunit/phpunit/phpunit --testsuit all --order-by=random --random-order-seed 1633097885",
 		"psalm": "php ./vendor/vimeo/psalm/psalm --show-info=true"
+	},
+	"config": {
+		"process-timeout": 0
 	}
 }

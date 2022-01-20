@@ -31,8 +31,9 @@ namespace Mezon\Transport\Tests
     use Mezon\Transport\HttpRequestParams;
 
     /**
-     * Unit tests for the class HttpRequestParams.
+     * Unit tests for the class HttpRequestParams
      */
+    // TODO do we need this crap?
     define('SESSION_ID_FIELD_NAME', 'session_id');
 
     /**
@@ -78,6 +79,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam('unexisting-param', 'default-value');
 
             // assertions
@@ -96,6 +98,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
 
             // assertions
@@ -114,6 +117,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
 
             // assertions
@@ -132,6 +136,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
 
             // assertions
@@ -164,6 +169,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam('Custom-Header');
 
             // assertions
@@ -181,6 +187,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam('post-parameter');
 
             // assertions
@@ -198,6 +205,7 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
+            /** @var string $param */
             $param = $requestParams->getParam('get-parameter');
 
             // assertions
@@ -213,10 +221,11 @@ namespace Mezon\Transport\Tests
             $requestParams = $this->getRequestParamsMock();
 
             // test body
-            $result = $requestParams->getParam('rparam');
+            /** @var int $param */
+            $param = $requestParams->getParam('rparam');
 
             // assertions
-            $this->assertEquals(111, $result);
+            $this->assertEquals(111, $param);
         }
     }
 }
