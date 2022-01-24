@@ -1,231 +1,208 @@
 <?php
-namespace 
+namespace Mezon\Transport\Tests;
+
+use Mezon\Router\Router;
+use PHPUnit\Framework\TestCase;
+use Mezon\Transport\HttpRequestParams;
+use Mezon\Headers\Layer;
+use Mezon\Conf\Conf;
+
+/**
+ * Unit tests for the class HttpRequestParams
+ */
+// TODO do we need this crap?
+define('SESSION_ID_FIELD_NAME', 'session_id');
+
+/**
+ *
+ * @author Dodonov A.A.
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
+class HttpRequestParamsUnitTest extends TestCase
 {
 
     /**
-     * Method returns list of headers
      *
-     * @return array list of headers
+     * {@inheritdoc}
+     * @see TestCase::setUp()
      */
-    function getallheaders(): array
+    protected function setUp(): void
     {
-        return \Mezon\Transport\Tests\Headers::getAllHeaders();
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        Conf::setConfigStringValue('headers/layer', 'mock');
     }
 
     /**
-     * Method sets headers for testing purposes
+     * Method constructs object to be tested
      *
-     * @param array $headers
-     *            headers
+     * @return HttpRequestParams request param object
      */
-    function setallheaders(array $headers): void
+    protected function getRequestParamsMock(): HttpRequestParams
     {
-        \Mezon\Transport\Tests\Headers::setAllHeaders($headers);
+        $router = new Router();
+        $router->addRoute('/test/[i:rparam]/', function () {
+            // no need to do something
+        }, 'GET');
+        $router->callRoute('/test/111/');
+
+        return new HttpRequestParams($router);
     }
-}
-namespace Mezon\Transport\Tests
-{
-
-    use Mezon\Router\Router;
-    use PHPUnit\Framework\TestCase;
-    use Mezon\Transport\HttpRequestParams;
 
     /**
-     * Unit tests for the class HttpRequestParams
+     * Testing empty result of the getHttpRequestHeaders method
      */
-    // TODO do we need this crap?
-    define('SESSION_ID_FIELD_NAME', 'session_id');
-
-    /**
-     *
-     * @author Dodonov A.A.
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    class HttpRequestParamsUnitTest extends TestCase
+    public function testGetHttpRequestHeaders(): void
     {
+        // setup
+        $requestParams = $this->getRequestParamsMock();
 
-        /**
-         *
-         * {@inheritdoc}
-         * @see TestCase::setUp()
-         */
-        protected function setUp(): void
-        {
-            $_SERVER['REQUEST_METHOD'] = 'GET';
-        }
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam('unexisting-param', 'default-value');
 
-        /**
-         * Method constructs object to be tested
-         *
-         * @return HttpRequestParams request param object
-         */
-        protected function getRequestParamsMock(): HttpRequestParams
-        {
-            $router = new Router();
-            $router->addRoute('/test/[i:rparam]/', function () {
-                // no need to do something
-            }, 'GET');
-            $router->callRoute('/test/111/');
+        // assertions
+        $this->assertEquals('default-value', $param, 'Default value must be returned but it was not');
+    }
 
-            return new HttpRequestParams($router);
-        }
+    /**
+     * Testing getting parameter
+     */
+    public function testGetSessionIdFromAuthorization(): void
+    {
+        // setup
+        Layer::setAllHeaders([
+            'Authorization' => 'Basic author session id'
+        ]);
+        $requestParams = $this->getRequestParamsMock();
 
-        /**
-         * Testing empty result of the get_http_request_headers method
-         */
-        public function testGetHttpRequestHeaders(): void
-        {
-            // setup
-            $requestParams = $this->getRequestParamsMock();
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam('unexisting-param', 'default-value');
+        // assertions
+        $this->assertEquals('author session id', $param);
+    }
 
-            // assertions
-            $this->assertEquals('default-value', $param, 'Default value must be returned but it was not');
-        }
+    /**
+     * Testing getting parameter
+     */
+    public function testGetSessionIdFromAuthentication(): void
+    {
+        // setup
+        Layer::setAllHeaders([
+            'Authentication' => 'Basic author session id'
+        ]);
+        $requestParams = $this->getRequestParamsMock();
 
-        /**
-         * Testing getting parameter
-         */
-        public function testGetSessionIdFromAuthorization(): void
-        {
-            // setup
-            Headers::setAllHeaders([
-                'Authorization' => 'Basic author session id'
-            ]);
-            $requestParams = $this->getRequestParamsMock();
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
+        // assertions
+        $this->assertEquals('author session id', $param, 'Session id must be fetched but it was not');
+    }
 
-            // assertions
-            $this->assertEquals('author session id', $param);
-        }
+    /**
+     * Testing getting parameter
+     */
+    public function testGetSessionIdFromCgiAuthorization(): void
+    {
+        // setup
+        Layer::setAllHeaders([
+            'Cgi-Authorization' => 'Basic cgi author session id'
+        ]);
+        $requestParams = $this->getRequestParamsMock();
 
-        /**
-         * Testing getting parameter
-         */
-        public function testGetSessionIdFromAuthentication(): void
-        {
-            // setup
-            Headers::setAllHeaders([
-                'Authentication' => 'Basic author session id'
-            ]);
-            $requestParams = $this->getRequestParamsMock();
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
+        // assertions
+        $this->assertEquals('cgi author session id', $param, 'Session id must be fetched but it was not');
+    }
 
-            // assertions
-            $this->assertEquals('author session id', $param, 'Session id must be fetched but it was not');
-        }
+    /**
+     * Testing getting parameter
+     */
+    public function testGetUnexistingSessionId(): void
+    {
+        Layer::setAllHeaders([]);
 
-        /**
-         * Testing getting parameter
-         */
-        public function testGetSessionIdFromCgiAuthorization(): void
-        {
-            // setup
-            Headers::setAllHeaders([
-                'Cgi-Authorization' => 'Basic cgi author session id'
-            ]);
-            $requestParams = $this->getRequestParamsMock();
+        $requestParams = $this->getRequestParamsMock();
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam(SESSION_ID_FIELD_NAME);
+        $this->expectException(\Exception::class);
+        $requestParams->getParam(SESSION_ID_FIELD_NAME);
+    }
 
-            // assertions
-            $this->assertEquals('cgi author session id', $param, 'Session id must be fetched but it was not');
-        }
+    /**
+     * Testing getting parameter from custom header
+     */
+    public function testGetParameterFromHeader(): void
+    {
+        // setup
+        Layer::setAllHeaders([
+            'Custom-Header' => 'header value'
+        ]);
 
-        /**
-         * Testing getting parameter
-         */
-        public function testGetUnexistingSessionId(): void
-        {
-            Headers::setAllHeaders([]);
+        $requestParams = $this->getRequestParamsMock();
 
-            $requestParams = $this->getRequestParamsMock();
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam('Custom-Header');
 
-            $this->expectException(\Exception::class);
-            $requestParams->getParam(SESSION_ID_FIELD_NAME);
-        }
+        // assertions
+        $this->assertEquals('header value', $param, 'Header value must be fetched but it was not');
+    }
 
-        /**
-         * Testing getting parameter from custom header
-         */
-        public function testGetParameterFromHeader(): void
-        {
-            // setup
-            Headers::setAllHeaders([
-                'Custom-Header' => 'header value'
-            ]);
+    /**
+     * Testing getting parameter from $_POST
+     */
+    public function testGetParameterFromPost(): void
+    {
+        // setup
+        $_POST['post-parameter'] = 'post value';
 
-            $requestParams = $this->getRequestParamsMock();
+        $requestParams = $this->getRequestParamsMock();
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam('Custom-Header');
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam('post-parameter');
 
-            // assertions
-            $this->assertEquals('header value', $param, 'Header value must be fetched but it was not');
-        }
+        // assertions
+        $this->assertEquals('post value', $param, 'Value from $_POST must be fetched but it was not');
+    }
 
-        /**
-         * Testing getting parameter from $_POST
-         */
-        public function testGetParameterFromPost(): void
-        {
-            // setup
-            $_POST['post-parameter'] = 'post value';
+    /**
+     * Testing getting parameter from $_GET
+     */
+    public function testGetParameterFromGet(): void
+    {
+        // setup
+        $_GET['get-parameter'] = 'get value';
 
-            $requestParams = $this->getRequestParamsMock();
+        $requestParams = $this->getRequestParamsMock();
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam('post-parameter');
+        // test body
+        /** @var string $param */
+        $param = $requestParams->getParam('get-parameter');
 
-            // assertions
-            $this->assertEquals('post value', $param, 'Value from $_POST must be fetched but it was not');
-        }
+        // assertions
+        $this->assertEquals('get value', $param, 'Value from $_GET must be fetched but it was not');
+    }
 
-        /**
-         * Testing getting parameter from $_GET
-         */
-        public function testGetParameterFromGet(): void
-        {
-            // setup
-            $_GET['get-parameter'] = 'get value';
+    /**
+     * Testing method getParam wich fetches parameter from the route
+     */
+    public function testGettingParametersFromRoute(): void
+    {
+        // setup
+        $requestParams = $this->getRequestParamsMock();
 
-            $requestParams = $this->getRequestParamsMock();
+        // test body
+        /** @var int $param */
+        $param = $requestParams->getParam('rparam');
 
-            // test body
-            /** @var string $param */
-            $param = $requestParams->getParam('get-parameter');
-
-            // assertions
-            $this->assertEquals('get value', $param, 'Value from $_GET must be fetched but it was not');
-        }
-
-        /**
-         * Testing method getParam wich fetches parameter from the route
-         */
-        public function testGettingParametersFromRoute(): void
-        {
-            // setup
-            $requestParams = $this->getRequestParamsMock();
-
-            // test body
-            /** @var int $param */
-            $param = $requestParams->getParam('rparam');
-
-            // assertions
-            $this->assertEquals(111, $param);
-        }
+        // assertions
+        $this->assertEquals(111, $param);
     }
 }
