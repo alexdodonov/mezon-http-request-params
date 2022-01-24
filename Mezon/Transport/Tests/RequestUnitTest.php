@@ -2,6 +2,7 @@
 use PHPUnit\Framework\TestCase;
 use Mezon\Transport\Request;
 use Mezon\Router\Router;
+use Mezon\Conf\Conf;
 
 /**
  *
@@ -10,6 +11,17 @@ use Mezon\Router\Router;
  */
 class RequestUnitTest extends TestCase
 {
+
+    /**
+     *
+     * {@inheritdoc}
+     * @see TestCase::setUp()
+     */
+    protected function setUp(): void
+    {
+        // TODO move to the base class
+        Conf::setConfigStringValue('headers/layer', 'mock');
+    }
 
     /**
      * Method tests Request class
